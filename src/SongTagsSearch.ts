@@ -35,7 +35,13 @@ export class SongTagsSearch {
   private url: URL;
 
   constructor(videoDetails: MoreVideoDetails) {
-    this.searchTerm = removeParenthesizedText(videoDetails.title);
+    this.searchTerm = removeParenthesizedText(videoDetails.title)
+    .replace(/[^\u4e00-\u9fa5a-z0-9]/gi, '_')
+    .split('_')
+    .filter((element) => element)
+    .join('_');
+
+    console.log(this.searchTerm)
     this.url = new URL('https://itunes.apple.com/search?');
     this.url.searchParams.set('media', 'music');
     this.url.searchParams.set('term', this.searchTerm);
