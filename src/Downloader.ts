@@ -44,6 +44,7 @@ export class Downloader {
     const formatConverter = new FormatConverter();
     const songTagsSearch = new SongTagsSearch(videoInfo.videoDetails);
 
+    console.log(`Downloading: ${videoInfo.videoDetails.title}`);
     const outputFile = this.getOutputFile(videoInfo.videoDetails.title);
     const videoData = await this.downloadVideo(videoInfo).catch((error) => {
       throw new YtdlMp3Error('Failed to download video', {
@@ -81,11 +82,11 @@ export class Downloader {
   /** Returns the absolute path to the audio file to be downloaded */
   private getOutputFile(videoTitle: string): string {
     const baseFileName = removeParenthesizedText(videoTitle)
-      .replace(/[^a-z0-9]/gi, '_')
+      .replace(/[^\u4e00-\u9fa5a-z0-9]/gi, '_')
       .split('_')
       .filter((element) => element)
-      .join('_')
-      .toLowerCase();
+      .join('_');
+      console.log('baseFileName:',baseFileName);
     return path.join(this.outputDir, baseFileName + '.mp3');
   }
 }
